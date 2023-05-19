@@ -33,7 +33,7 @@ void pa0_adc_init(void){
 	/*Enable clock access to ADC*/
 	RCC->AHBENR |= ADC12EN;
 
-	/*Configure ADC clock mode (HCLK/2)*/
+	/*Configure ADC clock mode (HCLK/2)*/ //ftiakse /4
 	ADC12_COMMON->CCR |= (1U<<17);
 	ADC12_COMMON->CCR &=~ (1U<<16);
 
@@ -182,14 +182,14 @@ void pa1_adc2_interrupt_init(void){
 
 void start_conversion1(void){
 	/*Enable continuous conversion*/
-	ADC1->CFGR |= CFGR_CONT;
+	//ADC1->CFGR |= CFGR_CONT;
 	/*Start the ADC conversion*/
 	ADC1->CR |= CR_ADSTART;
 }
 
 void start_conversion2(void){
 	/*Enable continuous conversion*/
-	ADC2->CFGR |= CFGR_CONT;
+	//ADC2->CFGR |= CFGR_CONT;
 	/*Start the ADC conversion*/
 	ADC2->CR |= CR_ADSTART;
 }

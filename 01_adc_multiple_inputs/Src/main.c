@@ -11,6 +11,7 @@ uint16_t sensor_value1, sensor_value2;
 
 int main(void){
 
+	tim2_pa1_output_compare();
 	pa0_adc1_interrupt_init();
 	pa1_adc2_interrupt_init();
 	start_conversion1();
@@ -34,6 +35,9 @@ static void adc2_callback(void){
 }
 
 void ADC1_2_IRQHandler(void){
+	///metefere times interrupt se pinaka -- cyclic buffer
+	//DMA gia kalutera -- double cyclic buffer
+
 	/*Check if eoc in SR*/
 	if((ADC1->ISR & ISR_EOC)!=0){
 		/*Clear EOC*/

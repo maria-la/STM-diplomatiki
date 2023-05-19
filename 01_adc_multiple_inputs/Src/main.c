@@ -11,11 +11,9 @@ uint16_t sensor_value1, sensor_value2;
 
 int main(void){
 
-	tim2_pa1_output_compare();
-	pa0_adc1_interrupt_init();
-	pa1_adc2_interrupt_init();
-	start_conversion1();
-	start_conversion2();
+	adc1_interrupt_init_ch1();
+	adc2_interrupt_init_ch1();
+	start_conversion_dual();
 
 	while(1){
 

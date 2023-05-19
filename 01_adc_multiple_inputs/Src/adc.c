@@ -18,59 +18,7 @@
 
 #define IER_EOCIE 		(1U<<2)
 
-void pa0_adc_init(void){
-
-	/***Configure the ADC GPIO ***/
-	/*Enable clock access to GPIOA*/
-	RCC->AHBENR |= IOPAEN;
-
-
-	/*Set the mode of PA0 to analog*/
-	GPIOA->MODER |= (1U<<0);
-	GPIOA->MODER |= (1U<<1);
-
-	/***Configure the ADC module***/
-	/*Enable clock access to ADC*/
-	RCC->AHBENR |= ADC12EN;
-
-	/*Configure ADC clock mode (HCLK/2)*/ //ftiakse /4
-	ADC12_COMMON->CCR |= (1U<<17);
-	ADC12_COMMON->CCR &=~ (1U<<16);
-
-	/*Enable voltage regulator*/
-	ADC1->CR &=~ (1U<<29);
-	ADC1->CR |= (1U<<28);
-
-	/*Confirm ADEN is off*/
-	while((ADC1->CR & CR_ADEN)){}
-	//ADC1->CR &=~ CR_ADEN;
-
-	/*Configure and start calibration*/
-	ADC1->CR &= ~CR_ADCALDIF;
-	ADC1->CR |= CR_ADCAL;
-
-	//value1 = ADC1->CR;
-
-	/*Wait for calibration to end*/
-	while(ADC1->CR & CR_ADCAL){}
-
-	/*Conversion sequence start*/
-	ADC1->SQR1 = ADC_CH1;
-
-	/*Conversion sequence length*/
-	ADC1->SQR1 &= ~(1U<<0);
-	ADC1->SQR1 &= ~(1U<<1);
-	ADC1->SQR1 &= ~(1U<<2);
-	ADC1->SQR1 &= ~(1U<<3);
-
-	/*Enable ADC module*/
-	ADC1->CR |= CR_ADEN;
-
-	/*Wait for ADC to be ready*/
-	while(!(ADC1->ISR & ISR_ADRDY)){}
-}
-
-void pa0_adc1_interrupt_init(void){
+void adc1_interrupt_init_ch1(void){
 
 	/***Configure the ADC GPIO ***/
 	/*Enable clock access to GPIOA*/
@@ -93,7 +41,12 @@ void pa0_adc1_interrupt_init(void){
 
 	/*Configure ADC clock mode (HCLK/2)*/
 	ADC12_COMMON->CCR |= (1U<<17);
-	ADC12_COMMON->CCR &=~ (1U<<16);
+	ADC12_COMMON->CCR |= (1U<<16);
+
+	/*Configure sample time register to 181.5 ADC clock cycles*/
+	ADC1->SMPR1 &=~ (1U<<0);
+	ADC1->SMPR1 |= (1U<<1);
+	ADC1->SMPR1 |= (1U<<2);
 
 	/*Enable voltage regulator*/
 	ADC1->CR &=~ (1U<<29);
@@ -125,7 +78,7 @@ void pa0_adc1_interrupt_init(void){
 	while(!(ADC1->ISR & ISR_ADRDY)){}
 }
 
-void pa1_adc2_interrupt_init(void){
+void adc2_interrupt_init_ch1(void){
 
 	/***Configure the ADC GPIO ***/
 	/*Enable clock access to GPIOA*/
@@ -148,7 +101,12 @@ void pa1_adc2_interrupt_init(void){
 
 	/*Configure ADC clock mode (HCLK/2)*/
 	ADC12_COMMON->CCR |= (1U<<17);
-	ADC12_COMMON->CCR &=~ (1U<<16);
+	ADC12_COMMON->CCR |= (1U<<16);
+
+	/*Configure sample time register to 181.5 ADC clock cycles*/
+	ADC2->SMPR1 &=~ (1U<<0);
+	ADC2->SMPR1 |= (1U<<1);
+	ADC2->SMPR1 |= (1U<<2);
 
 	/*Enable voltage regulator*/
 	ADC2->CR &=~ (1U<<29);
@@ -180,19 +138,17 @@ void pa1_adc2_interrupt_init(void){
 	while(!(ADC2->ISR & ISR_ADRDY)){}
 }
 
-void start_conversion1(void){
+void start_conversion_dual(void){
+	/*Enable dual mode*/
+	ADC12_COMMON->CCR |= (1U<<0);
+
 	/*Enable continuous conversion*/
-	//ADC1->CFGR |= CFGR_CONT;
+	ADC1->CFGR |= CFGR_CONT;
+
 	/*Start the ADC conversion*/
 	ADC1->CR |= CR_ADSTART;
 }
 
-void start_conversion2(void){
-	/*Enable continuous conversion*/
-	//ADC2->CFGR |= CFGR_CONT;
-	/*Start the ADC conversion*/
-	ADC2->CR |= CR_ADSTART;
-}
 
 
 uint16_t adc_read1(void){

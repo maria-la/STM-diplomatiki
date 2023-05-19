@@ -5,10 +5,9 @@
 
 #define ISR_EOC 		(1U<<2)
 
-void pa0_adc1_interrupt_init(void);
-void pa1_adc2_interrupt_init(void);
+void adc1_interrupt_init_ch1(void);
+void adc2_interrupt_init_ch1(void);
 uint16_t adc_read1(void);
-void start_conversion1(void);
-void start_conversion2(void);
+void start_conversion_dual(void);
 
 #endif /* ADC_H_ */

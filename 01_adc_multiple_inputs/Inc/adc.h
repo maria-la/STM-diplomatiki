@@ -1,7 +1,7 @@
 #ifndef ADC_H_
 #define ADC_H_
 
-#include <stdint.h>
+//#include <stdint.h>
 
 #define ISR_EOC 		(1U<<2)
 

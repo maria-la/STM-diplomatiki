@@ -1,5 +1,4 @@
 #include "stm32f3xx.h"
-#include "adc.h"
 
 #define IOPAEN			(1U<<17)
 #define ADC12EN			(1U<<28)
@@ -39,7 +38,7 @@ void adc1_interrupt_init_ch1(void){
 	/*Enable ADC interrupt in NVIC*/
 	NVIC_EnableIRQ(ADC1_2_IRQn);
 
-	/*Configure ADC clock mode (HCLK/2)*/
+	/*Configure ADC clock mode (HCLK/4)*/
 	ADC12_COMMON->CCR |= (1U<<17);
 	ADC12_COMMON->CCR |= (1U<<16);
 
@@ -99,7 +98,7 @@ void adc2_interrupt_init_ch1(void){
 	/*Enable ADC interrupt in NVIC*/
 	NVIC_EnableIRQ(ADC1_2_IRQn);
 
-	/*Configure ADC clock mode (HCLK/2)*/
+	/*Configure ADC clock mode (HCLK/4)*/
 	ADC12_COMMON->CCR |= (1U<<17);
 	ADC12_COMMON->CCR |= (1U<<16);
 
@@ -147,15 +146,5 @@ void start_conversion_dual(void){
 
 	/*Start the ADC conversion*/
 	ADC1->CR |= CR_ADSTART;
-}
-
-
-
-uint16_t adc_read1(void){
-	/*Wait for conversion to be complete*/
-	while(!(ADC1->ISR & ISR_EOC)){}
-
-	/*Read conversion result*/
-	return (ADC1->DR);
 }
 

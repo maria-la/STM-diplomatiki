@@ -24,14 +24,15 @@ int main(void){
 
 static void adc1_callback(void){
 	sensor_value1 = ADC1->DR;
-	printf("Sensor Value: %d \n\r", (int)sensor_value1);
 
+	/*Move values to mem*/
 	dma_init_ch1((uint32_t)&ADC1->DR, (uint32_t)mic1, 100);
 }
 
 static void adc2_callback(void){
 	sensor_value2 = ADC2->DR;
-	printf("Sensor Value: %d \n\r", (int)sensor_value2);
+
+	/*Move values to mem*/
 	dma_init_ch2((uint32_t)&ADC2->DR, (uint32_t)mic2, 100);
 }
 

@@ -15,9 +15,6 @@ int main(void){
 	adc2_interrupt_init_ch1();
 	start_conversion_dual();
 
-	//dma_init_ch1((uint32_t)&ADC1->DR, (uint32_t)&mic1, 100);
-
-
 	while(1){
 
 	}

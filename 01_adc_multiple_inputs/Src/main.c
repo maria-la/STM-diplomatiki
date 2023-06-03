@@ -4,6 +4,13 @@ uint16_t m1,m2;
 
 int main(void){
 
+
+	RCC->AHBENR |= IOPAEN;
+
+	GPIOA->MODER |= (1U<<10);
+	GPIOA->MODER &=~ (1U<<11);
+
+
 	adc1_interrupt_init_ch1();
 	adc2_interrupt_init_ch1();
 	start_conversion_dual();
@@ -28,16 +35,26 @@ static void adc1_callback(void){
 static void adc2_callback(void){
 	sensor_value2 = ADC2->DR;
 	printf("Sensor Value: %d \n\r", (int)sensor_value2);
-	//dma_init_ch1((uint32_t)&ADC1->DR, (uint32_t)mic2, 100);
+	dma_init_ch2((uint32_t)&ADC2->DR, (uint32_t)mic2, 100);
 }
 
-static void dma_callback(void){
+static void dma_ch1_callback(void){
 	GPIOA->ODR |= LED_PIN;
 	m1 = ADC1->DR;
 }
 
-static void dma_callback_h(void){
+static void dma_ch1_callback_h(void){
+	//GPIOA->ODR |= LED_PIN;
+	m2 = ADC1->DR;
+}
+
+static void dma_ch2_callback(void){
 	GPIOA->ODR |= LED_PIN;
+	m1 = ADC1->DR;
+}
+
+static void dma_ch2_callback_h(void){
+	//GPIOA->ODR |= LED_PIN;
 	m2 = ADC1->DR;
 }
 
@@ -69,7 +86,7 @@ void DMA1_CH1_IRQHandler(void){
 		DMA1->IFCR |= IFCR_CTCIF1;
 
 		//Do something
-		dma_callback();
+		dma_ch1_callback();
 
 	}
 
@@ -78,7 +95,29 @@ void DMA1_CH1_IRQHandler(void){
 			DMA1->IFCR |= IFCR_CHTIF1;
 
 			//Do something
-			dma_callback_h();
+			dma_ch1_callback_h();
+
+		}
+
+}
+
+void DMA1_CH2_IRQHandler(void){
+	/*Check for transfer complete interrupt*/
+	if(DMA1->ISR & ISR_TCIF2){
+		/*Clear interrupt flag*/
+		DMA1->IFCR |= IFCR_CTCIF2;
+
+		//Do something
+		dma_ch2_callback();
+
+	}
+
+	if(DMA1->ISR & ISR_HTIF2){
+			/*Clear interrupt flag*/
+			DMA1->IFCR |= IFCR_CHTIF2;
+
+			//Do something
+			dma_ch2_callback_h();
 
 		}
 

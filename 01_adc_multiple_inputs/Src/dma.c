@@ -35,7 +35,7 @@ void dma_init_ch1(uint32_t per,uint32_t mem, uint32_t len){
 	DMA1_Channel1->CCR |= (1U<<12); //priority
 	DMA1_Channel1->CCR |= (1U<<13);
 
-	DMA1_Channel1->CCR |= (1U<<10); //priority
+	DMA1_Channel1->CCR |= (1U<<10); //transfer size
 	DMA1_Channel1->CCR |= (1U<<8);
 
 	/*Set the peripheral buffer*/
@@ -95,7 +95,7 @@ void dma_init_ch2(uint32_t per,uint32_t mem, uint32_t len){
 	DMA1_Channel2->CCR |= (1U<<12); //priority
 	DMA1_Channel2->CCR |= (1U<<13);
 
-	DMA1_Channel2->CCR |= (1U<<10); //priority
+	DMA1_Channel2->CCR |= (1U<<10); //transfer size
 	DMA1_Channel2->CCR |= (1U<<8);
 
 	/*Set the peripheral buffer*/

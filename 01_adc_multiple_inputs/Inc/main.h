@@ -7,8 +7,11 @@
 #include "uart.h"
 #include "adc.h"
 #include "dma.h"
+#include "arm_math.h"
+#include "arm_const_structs.h"
+#include "arm_common_tables.h"
 
-
+#define winLength 		256
 
 #define IOPAEN			(1U<<17)
 #define PIN5 			(1U<<5)
@@ -38,9 +41,10 @@ static void dma_ch2_callback(void);
 static void dma_ch2_callback_h(void);
 
 
-uint16_t mic1[100], mic2[100];
+uint16_t mic1[winLength], mic2[winLength];
 
 uint16_t sensor_value1, sensor_value2;
+
 
 
 #endif /* MAIN_H_ */

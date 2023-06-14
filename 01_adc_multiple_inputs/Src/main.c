@@ -26,14 +26,14 @@ static void adc1_callback(void){
 	sensor_value1 = ADC1->DR;
 
 	/*Move values to mem*/
-	dma_init_ch1((uint32_t)&ADC1->DR, (uint32_t)mic1, 100);
+	dma_init_ch1((uint32_t)&ADC1->DR, (uint32_t)mic1, winLength);
 }
 
 static void adc2_callback(void){
 	sensor_value2 = ADC2->DR;
 
 	/*Move values to mem*/
-	dma_init_ch2((uint32_t)&ADC2->DR, (uint32_t)mic2, 100);
+	dma_init_ch2((uint32_t)&ADC2->DR, (uint32_t)mic2, winLength);
 }
 
 static void dma_ch1_callback(void){

@@ -37,8 +37,8 @@ extern "C" {
 #include "uart.h"
 #include "adc.h"
 #include "dma.h"
-/*
 #include "arm_math.h"
+/*
 #include "arm_const_structs.h"
 #include "arm_common_tables.h"
 */

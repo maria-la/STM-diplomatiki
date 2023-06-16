@@ -42,13 +42,23 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+uint16_t m1,m2;
+uint16_t mic1[winLength], mic2[winLength];
 
+uint16_t sensor_value1, sensor_value2;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
+static void adc1_callback(void);
+static void adc2_callback(void);
 
+static void dma_ch1_callback(void);
+static void dma_ch1_callback_h(void);
+
+static void dma_ch2_callback(void);
+static void dma_ch2_callback_h(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -73,6 +83,11 @@ int main(void)
 
   /* USER CODE BEGIN Init */
 
+	RCC->AHBENR |= IOPAEN;
+
+	GPIOA->MODER |= (1U<<10);
+	GPIOA->MODER &=~ (1U<<11);
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -84,7 +99,9 @@ int main(void)
 
   /* Initialize all configured peripherals */
   /* USER CODE BEGIN 2 */
-
+  	adc1_interrupt_init_ch1();
+  	adc2_interrupt_init_ch1();
+  	start_conversion_dual();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -135,7 +152,104 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+static void adc1_callback(void){
+	sensor_value1 = ADC1->DR;
 
+	/*Move values to mem*/
+	dma_init_ch1((uint32_t)&ADC1->DR, (uint32_t)mic1, winLength);
+}
+
+static void adc2_callback(void){
+	sensor_value2 = ADC2->DR;
+
+	/*Move values to mem*/
+	dma_init_ch2((uint32_t)&ADC2->DR, (uint32_t)mic2, winLength);
+}
+
+static void dma_ch1_callback(void){
+	GPIOA->ODR |= LED_PIN;
+	m1 = ADC1->DR;
+}
+
+static void dma_ch1_callback_h(void){
+	//GPIOA->ODR |= LED_PIN;
+	m2 = ADC1->DR;
+}
+
+static void dma_ch2_callback(void){
+	GPIOA->ODR |= LED_PIN;
+	m1 = ADC1->DR;
+}
+
+static void dma_ch2_callback_h(void){
+	//GPIOA->ODR |= LED_PIN;
+	m2 = ADC1->DR;
+}
+
+void ADC1_2_IRQHandler(void){
+	/*Check if eoc in SR*/
+	if((ADC1->ISR & ISR_EOC)!=0){
+		/*Clear EOC*/
+		ADC1->ISR &=~ ISR_EOC;
+
+		//Do something
+		adc1_callback();
+	}
+
+	if((ADC2->ISR & ISR_EOC)!=0){
+			/*Clear EOC*/
+			ADC2->ISR &=~ ISR_EOC;
+
+			//Do something
+			adc2_callback();
+		}
+}
+
+
+
+void DMA1_CH1_IRQHandler(void){
+	/*Check for transfer complete interrupt*/
+	if(DMA1->ISR & ISR_TCIF1){
+		/*Clear interrupt flag*/
+		DMA1->IFCR |= IFCR_CTCIF1;
+
+		//Do something
+		dma_ch1_callback();
+
+	}
+
+	if(DMA1->ISR & ISR_HTIF1){
+			/*Clear interrupt flag*/
+			DMA1->IFCR |= IFCR_CHTIF1;
+
+			//Do something
+			dma_ch1_callback_h();
+
+		}
+
+}
+
+void DMA1_CH2_IRQHandler(void){
+	/*Check for transfer complete interrupt*/
+	if(DMA1->ISR & ISR_TCIF2){
+		/*Clear interrupt flag*/
+		DMA1->IFCR |= IFCR_CTCIF2;
+
+		//Do something
+		dma_ch2_callback();
+
+	}
+
+	if(DMA1->ISR & ISR_HTIF2){
+			/*Clear interrupt flag*/
+			DMA1->IFCR |= IFCR_CHTIF2;
+
+			//Do something
+			dma_ch2_callback_h();
+
+		}
+
+}
 /* USER CODE END 4 */
 
 /**
@@ -169,3 +283,5 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
+
+

@@ -51,7 +51,7 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
-#define winLength 		256
+#define winLength 		128
 
 #define IOPAEN			(1U<<17)
 #define PIN5 			(1U<<5)

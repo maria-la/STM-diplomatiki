@@ -46,6 +46,10 @@ uint16_t m1,m2;
 uint16_t mic1[winLength], mic2[winLength];
 
 uint16_t sensor_value1, sensor_value2;
+
+float32_t fftOut1[winLength], input1[winLength];
+arm_rfft_fast_instance_f32 audioInput1;
+uint8_t ifftFlag = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -169,6 +173,14 @@ static void adc2_callback(void){
 static void dma_ch1_callback(void){
 	GPIOA->ODR |= LED_PIN;
 	m1 = ADC1->DR;
+	for(int i=0;i<winLength; i++){
+		input1[i] = mic1[i];
+	}
+
+	arm_rfft_fast_init_f32(&audioInput1, winLength);
+
+	arm_rfft_fast_f32(&audioInput1, input1, fftOut1, ifftFlag);
+
 }
 
 static void dma_ch1_callback_h(void){

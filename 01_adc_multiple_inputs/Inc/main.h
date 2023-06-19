@@ -11,7 +11,7 @@
 #include "arm_const_structs.h"
 #include "arm_common_tables.h"
 
-#define winLength 		256
+#define winLength 		128
 
 #define IOPAEN			(1U<<17)
 #define PIN5 			(1U<<5)
@@ -45,6 +45,8 @@ uint16_t mic1[winLength], mic2[winLength];
 
 uint16_t sensor_value1, sensor_value2;
 
-
+float32_t fftOut1[winLength], input1[winLength];
+arm_rfft_fast_instance_f32 audioInput1;
+uint8_t ifftFlag = 0;
 
 #endif /* MAIN_H_ */

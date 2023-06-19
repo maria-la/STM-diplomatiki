@@ -1,6 +1,5 @@
 "./Src/adc.o"
 "./Src/dma.o"
-"./Src/dsp.o"
 "./Src/main.o"
 "./Src/syscalls.o"
 "./Src/sysmem.o"

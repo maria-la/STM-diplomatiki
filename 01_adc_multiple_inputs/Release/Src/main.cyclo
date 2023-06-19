@@ -1,0 +1,4 @@
+main.c:5:5:main	1
+main.c:59:6:ADC1_2_IRQHandler	3
+main.c:80:6:DMA1_CH1_IRQHandler	3
+main.c:102:6:DMA1_CH2_IRQHandler	3

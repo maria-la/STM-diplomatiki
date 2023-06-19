@@ -28,21 +28,4 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>Scripts</name>
-			<type>2</type>
-			<location>C:/Users/Maria/STM32CubeIDE/workspace_diplomatiki/chip_headers/CMSIS-DSP-main/Scripts</location>
-		</link>
-		<link>
-			<name>Source</name>
-			<type>2</type>
-			<location>C:/Users/Maria/STM32CubeIDE/workspace_diplomatiki/chip_headers/CMSIS-DSP-main/Source</location>
-		</link>
-		<link>
-			<name>TransformFunctions</name>
-			<type>2</type>
-			<location>C:/Users/Maria/STM32CubeIDE/workspace_diplomatiki/chip_headers/CMSIS-DSP-main/Source/TransformFunctions</location>
-		</link>
-	</linkedResources>
 </projectDescription>

@@ -1,0 +1,2 @@
+../Src/dma.c:19:6:dma_init_ch1	8	static
+../Src/dma.c:79:6:dma_init_ch2	8	static

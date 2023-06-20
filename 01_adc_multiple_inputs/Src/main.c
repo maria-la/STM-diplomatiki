@@ -43,7 +43,7 @@ static void dma_ch1_callback(void){
 	for(int i=0;i<winLength; i++){
 			input1[i] = mic1[i] *1.0 ;
 		}
-	arm_rfft_fast_init_128_f32(&audioInput1);
+	arm_rfft_fast_init_64_f32(&audioInput1);
 
 	arm_rfft_fast_f32(&audioInput1, input1, fftOut1, ifftFlag);
 	//arm_cfft_f32(&arm_cfft_sR_f32_len64, input1, ifftFlag, doBitReverse);

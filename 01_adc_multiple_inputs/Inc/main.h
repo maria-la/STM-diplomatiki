@@ -10,6 +10,8 @@
 #include "arm_math.h"
 #include "arm_const_structs.h"
 #include "arm_common_tables.h"
+#include "fpu.h"
+#include "signals.h"
 
 #define winLength 		128
 
@@ -40,14 +42,14 @@ static void dma_ch1_callback_h(void);
 static void dma_ch2_callback(void);
 static void dma_ch2_callback_h(void);
 
-
 uint16_t mic1[winLength], mic2[winLength];
 
 uint16_t sensor_value1, sensor_value2;
 
 float32_t fftOut1[winLength], input1[winLength];
+extern float32_t signal_to_plot[winLength];
+float ihsg[301],fsds[301];
 arm_rfft_fast_instance_f32 audioInput1;
-uint8_t ifftFlag = 0;
-uint8_t doBitReverse = 1;
+
 
 #endif /* MAIN_H_ */

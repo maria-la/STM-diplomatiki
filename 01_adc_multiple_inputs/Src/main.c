@@ -10,11 +10,12 @@ int main(void){
 	GPIOA->MODER |= (1U<<10);
 	GPIOA->MODER &=~ (1U<<11);
 
-
+	fpu_init();
 	adc1_interrupt_init_ch1();
 	adc2_interrupt_init_ch1();
 	start_conversion_dual();
 
+	arm_rfft_fast_init_128_f32(&audioInput1);
 	while(1){
 
 	}
@@ -41,14 +42,14 @@ static void dma_ch1_callback(void){
 	m1 = ADC1->DR;
 
 	for(int i=0;i<winLength; i++){
-			input1[i] = mic1[i] *1.0 ;
+			input1[i] = (float32_t) (mic1[i]);
 		}
-	arm_rfft_fast_init_64_f32(&audioInput1);
 
-	arm_rfft_fast_f32(&audioInput1, input1, fftOut1, ifftFlag);
-	//arm_cfft_f32(&arm_cfft_sR_f32_len64, input1, ifftFlag, doBitReverse);
 
-	//arm_cfft_f32(&audioInput1, input1, fftOut1, ifftFlag);
+	arm_rfft_fast_f32(&audioInput1, input1, fftOut1, 0);
+	arm_cmplx_mag_f32(fftOut1, fftOut1, (winLength/2));
+
+	fftOut1[0] = 0;
 
 }
 

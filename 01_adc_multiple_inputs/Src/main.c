@@ -114,14 +114,12 @@ void DMA1_CH1_IRQHandler(void){
 
 		k1 = 2; //flag
 
-
 	}
 	else if(DMA1->ISR & ISR_HTIF1){
 			/*Clear interrupt flag*/
 			DMA1->IFCR |= IFCR_CHTIF1;
 
 			k1 = 1; //flag
-
 	}
 
 }

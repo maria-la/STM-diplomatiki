@@ -112,7 +112,7 @@ void DMA1_CH1_IRQHandler(void){
 		/*Clear interrupt flag*/
 		DMA1->IFCR |= IFCR_CTCIF1;
 
-		k1 = 2; //fla
+		k1 = 2; //flag
 
 	}
 	else if(DMA1->ISR & ISR_HTIF1){

@@ -10,8 +10,7 @@
 #include "arm_math.h"
 #include "arm_const_structs.h"
 #include "arm_common_tables.h"
-#include "fpu.h"
-#include "signals.h"
+
 
 #define winLengthDouble	256
 #define winLength 		128

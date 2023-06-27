@@ -36,15 +36,8 @@
 
 uint16_t mic1[winLengthDouble], mic2[winLengthDouble];
 
-uint16_t sensor_value1, sensor_value2;
-
 float32_t fftOut1[winLengthDouble], fftOut2[winLengthDouble];
 float32_t input1[winLengthDouble], input2[winLengthDouble];
-
-float32_t fastICAout1[winLength*numVoices];
-
-extern float32_t signal_to_plot[winLength];
-float ihsg[301],fsds[301];
 
 volatile char k1 = 0;
 volatile char k2 = 0;

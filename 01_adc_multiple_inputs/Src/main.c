@@ -1,7 +1,5 @@
 #include "main.h"
 
-uint16_t m1,m2;
-
 int main(void){
 
 

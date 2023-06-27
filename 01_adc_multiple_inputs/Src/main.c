@@ -53,7 +53,7 @@ int main(void){
 			arm_cmplx_mag_f32(&fftOut1[i-winLength], &fftOut1[i-winLength], (winLength/2));
 
 			fftOut1[i-winLength] = 0;
-			//fastica(fftOut1,fastICAout1);
+
 		}
 
 
@@ -88,7 +88,6 @@ int main(void){
 
 			fftOut2[i-winLength] = 0;
 
-			//fastica(fftOut1,fastICAout1);
 			}
 	}
 

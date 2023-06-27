@@ -12,8 +12,6 @@
 #include "arm_common_tables.h"
 #include "fpu.h"
 #include "signals.h"
-#include "fastICA.h"
-#include "ilrma.h"
 
 #define winLengthDouble	256
 #define winLength 		128
@@ -35,10 +33,6 @@
 
 #define ISR_TCIF2 		(1U<<5)
 #define ISR_HTIF2 		(1U<<6)
-
-
-static void adc1_callback(void);
-static void adc2_callback(void);
 
 
 uint16_t mic1[winLengthDouble], mic2[winLengthDouble];

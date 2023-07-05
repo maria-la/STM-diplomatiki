@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "stm32f3xx.h"
 #include "uart.h"
 #include "adc.h"
@@ -10,6 +11,12 @@
 #include "arm_math.h"
 #include "arm_const_structs.h"
 #include "arm_common_tables.h"
+#include "../include/utils.h"
+#include "../include/random.h"
+#include "../include/matrix.h"
+#include "../include/signal.h"
+#include "../include/fast_ica.h"
+#include "fpu.h"
 
 
 #define winLengthDouble	256
@@ -43,5 +50,7 @@ volatile char k1 = 0;
 volatile char k2 = 0;
 
 arm_rfft_fast_instance_f32 audioInput;
+
+
 
 #endif /* MAIN_H_ */

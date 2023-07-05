@@ -2,6 +2,17 @@
 
 int main(void){
 
+	// fastICA-----------------------------//
+	Matrix *x1;
+	FastICAStrategy strategy = Parallel;
+	GFunc g_function = LogCosh;
+	fp threshold = 1e-4f;
+	int max_iter = 3000;
+	int s_len = 10;
+	int s_rate = 100;
+	bool add_noise = true;
+	bool verbose = false;
+
 
 	RCC->AHBENR |= IOPAEN;
 
@@ -9,6 +20,7 @@ int main(void){
 	GPIOA->MODER &=~ (1U<<11);
 
 	fpu_init();
+	uart2_tx_init();
 	adc1_interrupt_init_ch1();
 	adc2_interrupt_init_ch1();
 
@@ -18,7 +30,7 @@ int main(void){
 	start_conversion_dual();
 
 	arm_rfft_fast_init_128_f32(&audioInput);
-
+	int n_samples = s_len * s_rate;
 
 	while(1){
 
@@ -52,6 +64,30 @@ int main(void){
 
 			fftOut1[i-winLength] = 0;
 
+			x1 = from_array( &fftOut1[i-winLength], winLength, 1);
+			//print_mat(x);
+			//x.data = &fftOut1[i-winLength];
+			// Perform FastICA
+
+
+		    // Create matrix S of original signals (n_components, n_samples)
+		    //Matrix *s = generate_signals(n_samples, (fp) s_len, add_noise);
+		    // Standardize signal
+		    Matrix *s_std = col_std(x1);
+		    div_col_(x1, s_std);
+
+		    //fp a_data[] = {1, 1, 1, 0.5f, 2, 1, 1.5f, 1, 2};
+		    //Matrix *a = from_array(a_data, 3, 3);
+
+		    // Create observation X by mixing signal S with matrix A (n_components, n_samples)
+		    //Matrix *x = mat_mul(a, s);
+
+
+		    // Perform FastICA
+		    Matrix *s_ = fast_ica(x1, true, strategy, g_function, threshold, max_iter);
+
+			//Matrix *s_ = fast_ica(x, true, strategy, g_function, threshold, max_iter);
+			//print_mat(s_);
 		}
 
 
@@ -86,6 +122,8 @@ int main(void){
 
 			fftOut2[i-winLength] = 0;
 
+
+			//y = from_array( &fftOut1[i-winLength], winLength, 1);
 			}
 	}
 

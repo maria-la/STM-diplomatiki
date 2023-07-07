@@ -50,19 +50,45 @@ void whitening(arm_matrix_instance_f32 *sig, uint16_t noOfSources,uint16_t freqB
             // Compute eigenvectors
             compute_eigenvectors(eigenvalues, &V, &eigv);
 
-            float32_t D2data[(dnum-1)*(dnum-1)];
-            arm_mat_init_f32 (&D2, (dnum-1), (dnum-1), D2data);
-            for(int j=0; j<((dnum-1)*(dnum-1)); j++){
-            	D2data[j] = sig->pData[j*noOfSources];
+            float32_t D2data[(dnum-1)*(dnum-1)], dData[matSize*matSize];
+            arm_fill_f32(0, dData,(matSize * matSize));
+            int k = 0;
+            for (int j=0; j<matSize; j++){
+            	dData[k] = eigenvalues[j];
+            	k += (matSize + 1);
             }
+
+
+           /* for(int j=0; j<((dnum-1)*(dnum-1)); j++){
+            	D2data[j] = sig->pData[j*noOfSources];
+            }*/
+
+
+          /*  for(int j=0; j<noOfSources; j++){
+            	XiData[noOfSources] += sig->pData[j*noOfSources];
+            }*/
+
+            k = 0;
+            int a = 0;
+            for(int j=0; j<matSize; j++){
+            	for(int w=(noOfSources-dnum+1); w<matSize; w++){
+            		eigv2Data[k] = eigv->pData[j*matSize+w];
+
+            		if(j>=(noOfSources-dnum+1)){
+            			arm_sqrt_f32(dData[j*matSize+w], &D2data[k]);
+            		}
+            	}
+            }
+
+            arm_mat_init_f32 (&D2, (dnum-1), (dnum-1), D2data);
 
             float32_t eigv2Data[noOfSources*(dnum-1)];
             arm_mat_init_f32 (&eigv2, (dnum-1), (dnum-1), eigv2Data);
-            for(int j=0; j<noOfSources; j++){
-            	XiData[noOfSources] += sig->pData[j*noOfSources];
-            }
+
 
             // Generating Y data
+            arm_mat_trans_f32 (&eigv2, &eigv2);
+
 
         }
 

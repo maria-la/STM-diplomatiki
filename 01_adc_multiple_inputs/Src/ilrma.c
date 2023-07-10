@@ -2,16 +2,38 @@
 #include <math.h>
 #include "arm_math.h"
 
-float32_t local_calcCostFunction(float32_t *P, float32_t *R, float32_t *W, uint32_t I, uint32_t J);
-
-
-void local_ILRMA1(float32_t *X, uint32_t nIter, uint32_t L, int drawConv, float32_t *refMixSpecgram, float32_t *Y, float32_t *cost, uint8_t NUM_FREQ_BINS, uint8_t NUM_TIME_FRAMES, uint8_t NUM_CHANNELS)
+void local_ILRMA1(float32_t *Sig, uint32_t nIter, uint32_t L, float32_t *Y, float32_t *cost)
 {
+	uint16_t freqBins = Sig->numRows;
+    uint16_t noOfChannels = Sig->numCols;
+
+    arm_matrix_instance_f32 W, Y;
+    arm_sort_instance_f32;
+
+    float32_t wData[noOfChannels*noOfChannels];
+    float32_t yData[freqBins*noOfChannels];
+    float32_t pXData[noOfChannels];
+
+    arm_mat_init_f32 (&W, noOfChannels, noOfChannels, wData);
+    arm_mat_init_f32 (&Xit, freqBins, noOfChannels, yData);
+    arm_mat_init_f32 (&pX, noOfChannels, freqBins, pXData);
+
+    arm_fill_f32(0, wData,(noOfChannels * noOfChannels));
+    arm_fill_f32(0, yData,(freqBins * noOfChannels));
+
+    arm_mat_trans_f32 (&pX, &pX);
+
+    for(int i=0; i<(noOfChannels * noOfChannels); i+=(noOfChannels+1)){
+        wData[i] = 1;
+    }
+
+    arm_mat_mult_f32(&W, &pX, &Y);
+    arm_mat_trans_f32 (&Y, &Y);
+
+
+
+
 
 }
 
-float32_t local_calcCostFunction(float32_t *P, float32_t *R, float32_t *W, uint32_t I, uint32_t J)
-{
-	return 0;
-}
 

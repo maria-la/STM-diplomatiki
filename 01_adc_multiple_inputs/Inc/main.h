@@ -11,6 +11,11 @@
 #include "arm_const_structs.h"
 #include "arm_common_tables.h"
 #include "fpu.h"
+#include "fastICA.h"
+#include "fastICA_emxAPI.h"
+#include "fastICA_terminate.h"
+#include "fastICA_types.h"
+#include "rt_nonfinite.h"
 
 
 #define winLengthDouble	256
@@ -51,5 +56,8 @@ volatile char k1 = 0;
 volatile char k2 = 0;
 
 arm_rfft_fast_instance_f32 audioInput;
+
+static unsigned short argInit_uint16_T(void);
+static emxArray_real_T *c_argInit_UnboundedxUnbounded_r(float32_t* mat, uint16_t rows, uint16_t cols);
 
 #endif /* MAIN_H_ */

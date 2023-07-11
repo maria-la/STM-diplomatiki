@@ -54,6 +54,28 @@ int main(void){
 
 			fftOut1[i-winLength] = 0;
 
+			emxArray_real_T *T;
+			emxArray_real_T *W;
+			emxArray_real_T *Z;
+			emxArray_real_T *Zica;
+			emxArray_real_T *mu;
+			/* Initialize function 'fastICA' input arguments. */
+			/* Initialize function input argument 'Z'. */
+			Z = c_argInit_UnboundedxUnbounded_r(fftOut1, 128, 2);
+			/* Call the entry-point 'fastICA'. */
+			emxInitArray_real_T(&Zica, 2);
+			emxInitArray_real_T(&W, 2);
+			emxInitArray_real_T(&T, 2);
+			emxInitArray_real_T(&mu, 1);
+			fastICA(Z, argInit_uint16_T(), Zica, W, T, mu);
+			emxDestroyArray_real_T(Z);
+			emxDestroyArray_real_T(Zica);
+			emxDestroyArray_real_T(W);
+			emxDestroyArray_real_T(T);
+			emxDestroyArray_real_T(mu);
+
+			fastICA_terminate();
+
 		}
 
 
@@ -143,4 +165,39 @@ void DMA1_CH2_IRQHandler(void){
 
 		}
 
+}
+
+/* Function Definitions */
+/*
+ * Arguments    : void
+ * Return Type  : unsigned short
+ */
+static unsigned short argInit_uint16_T(void)
+{
+  return 0U;
+}
+
+/*
+ * Arguments    : void
+ * Return Type  : emxArray_real_T *
+ */
+static emxArray_real_T *c_argInit_UnboundedxUnbounded_r(float32_t* mat, uint16_t rows, uint16_t cols)
+{
+  emxArray_real_T *result;
+  double *result_data;
+  int idx0;
+  int idx1;
+  /* Set the size of the array.
+Change this size to the value that the application requires. */
+  result = emxCreate_real_T(rows, cols);
+  result_data = result->data;
+  /* Loop over the array to initialize each element. */
+  for (idx0 = 0; idx0 < result->size[0U]; idx0++) {
+    for (idx1 = 0; idx1 < result->size[1U]; idx1++) {
+      /* Set the value of the array element.
+Change this value to the value that the application requires. */
+      result_data[idx0 + result->size[0] * idx1] = mat[idx0 + result->size[0] * idx1];
+    }
+  }
+  return result;
 }

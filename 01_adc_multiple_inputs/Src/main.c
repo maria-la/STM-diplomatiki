@@ -55,14 +55,20 @@ int main(void){
 			fftOut1[i-winLength] = 0;
 
 			emxArray_real32_T *W;
-			emxArray_real32_T *Z;
 			emxArray_real32_T *Zica;
+			//float fv[128];
+			float mu[128];
 			float T;
-			float mu;
+			/* Initialize function 'fastICA' input arguments. */
+			/* Initialize function input argument 'Z'. */
+			/* Call the entry-point 'fastICA'. */
+			emxInitArray_real32_T(&Zica, 2);
+			emxInitArray_real32_T(&W, 2);
+			//argInit_128x1_real32_T(fv);
+			fastICA(&fftOut1[i-winLength], 2, Zica, W, &T, mu);
+			//emxDestroyArray_real32_T(Zica);
+			emxDestroyArray_real32_T(W);
 
-			/* Invoke the entry-point functions.
-			You can call entry-point functions multiple times. */
-			main_fastICA(fftOut1, winLength);
 			/* Terminate the application.
 			You do not need to do this more than one time. */
 			fastICA_terminate();
@@ -100,6 +106,8 @@ int main(void){
 			arm_cmplx_mag_f32(&fftOut2[i-winLength], &fftOut2[i-winLength], (winLength/2));
 
 			fftOut2[i-winLength] = 0;
+
+
 
 			}
 	}
@@ -160,63 +168,29 @@ void DMA1_CH2_IRQHandler(void){
 
 /* Function Definitions */
 /*
- * Arguments    : void
- * Return Type  : emxArray_real32_T *
+ * Arguments    : float result[128]
+ * Return Type  : void
  */
-static emxArray_real32_T *argInit_Unboundedx1_real32_T(float32_t *fftOut, uint16_t len)
+/*static void argInit_128x1_real32_T(float result[128])
 {
-  emxArray_real32_T *result;
-  float *result_data;
-  const int i = len;
   int idx0;
-  /* Set the size of the array.
-Change this size to the value that the application requires. */
-  result = emxCreateND_real32_T(1, &i);
-  result_data = result->data;
-  /* Loop over the array to initialize each element. */
-  for (idx0 = 0; idx0 < result->size[0U]; idx0++) {
-    /* Set the value of the array element.
-Change this value to the value that the application requires. */
-    result_data[idx0] = fftOut[idx0];
+   Loop over the array to initialize each element.
+  for (idx0 = 0; idx0 < 128; idx0++) {
+     Set the value of the array element.
+Change this value to the value that the application requires.
+    result[idx0] = argInit_real32_T();
   }
-  return result;
-}
+}*/
 
 /*
  * Arguments    : void
  * Return Type  : float
  */
+/*
 static float argInit_real32_T(void)
 {
   return 0.0F;
 }
+*/
 
-/*
- * Arguments    : void
- * Return Type  : unsigned short
- */
-static unsigned short argInit_uint16_T(void)
-{
-  return 0U;
-}
 
-void main_fastICA(float32_t *fftOut, uint16_t len)
-{
-  emxArray_real32_T *W;
-  emxArray_real32_T *Z;
-  emxArray_real32_T *Zica;
-  emxArray_real32_T *mu;
-  float T;
-  /* Initialize function 'fastICA' input arguments. */
-  /* Initialize function input argument 'Z'. */
-  Z = argInit_Unboundedx1_real32_T(fftOut, len);
-  /* Call the entry-point 'fastICA'. */
-  emxInitArray_real32_T(&Zica, 1);
-  emxInitArray_real32_T(&W, 2);
-  emxInitArray_real32_T(&mu, 1);
-  fastICA(Z, argInit_uint16_T(), Zica, W, &T, mu);
-  emxDestroyArray_real32_T(Z);
-  emxDestroyArray_real32_T(Zica);
-  emxDestroyArray_real32_T(W);
-  emxDestroyArray_real32_T(mu);
-}

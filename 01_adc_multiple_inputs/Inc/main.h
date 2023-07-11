@@ -57,7 +57,12 @@ volatile char k2 = 0;
 
 arm_rfft_fast_instance_f32 audioInput;
 
+/* Function Declarations */
+static emxArray_real32_T *argInit_Unboundedx1_real32_T(float32_t *fftOut, uint16_t len);
+
+static float argInit_real32_T(void);
+
 static unsigned short argInit_uint16_T(void);
-static emxArray_real_T *c_argInit_UnboundedxUnbounded_r(float32_t* mat, uint16_t rows, uint16_t cols);
+void main_fastICA(float32_t *fftOut, uint16_t len);
 
 #endif /* MAIN_H_ */

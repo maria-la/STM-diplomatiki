@@ -89,6 +89,8 @@ int main(void){
 			fftOut2[i-winLength] = 0;
 
 			}
+
+		ILRMA(fftOut1, 2, 10, 128, 100, creal_T estSig_data[], int estSig_size[3], emxArray_real_T *cost);
 	}
 
 

@@ -12,6 +12,7 @@
 #include "arm_common_tables.h"
 #include "fpu.h"
 #include "whit.h"
+#include "centerRows.h"
 
 
 #define winLengthDouble	256

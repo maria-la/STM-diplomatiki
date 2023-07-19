@@ -21,6 +21,24 @@ int main(void){
 
 	arm_rfft_fast_init_128_f32(&audioInput);
 
+	float32_t aData[4] = {1,2,3,4};
+	float32_t uData[4];
+	float32_t sData[2];
+	float32_t vData[4];
+	float32_t atData[4];
+
+	float32_t covData[4];
+
+	arm_matrix_instance_f32 A, U, S, V, At, covm;
+	arm_mat_init_f32 (&A, 2, 2, aData);
+	//arm_mat_init_f32 (&At, 2, 2, atData);
+	//arm_mat_init_f32 (&U, 2, 2, uData);
+	arm_mat_init_f32 (&V, 2, 2, vData);
+	//arm_mat_init_f32 (&covm, 2, 2, covData);
+
+	//whitenRows(&A, &V);
+	centerRows(&A, &V);
+
 	while(1){
 
 		if(k1 != 0){

@@ -11,9 +11,7 @@
 #include "arm_const_structs.h"
 #include "arm_common_tables.h"
 #include "fpu.h"
-#include "whit.h"
-#include "centerRows.h"
-
+#include "normRows.h"
 
 #define winLengthDouble	256
 #define winLength 		128

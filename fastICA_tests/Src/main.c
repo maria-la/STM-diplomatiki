@@ -37,7 +37,7 @@ int main(void){
 	//arm_mat_init_f32 (&covm, 2, 2, covData);
 
 	//whitenRows(&A, &V);
-	centerRows(&A, &V);
+	normRows(&A, &V);
 
 	while(1){
 

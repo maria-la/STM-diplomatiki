@@ -38,7 +38,8 @@ void whitenRows(arm_matrix_instance_f32 *matrix, arm_matrix_instance_f32 *matrix
     arm_fill_f32 (0, Sdata, (numRows*numRows));
     k= 0;
     for(i=0; i<(numRows*numRows); i+= (numRows+1)){
-        arm_sqrt_f32(sigmaDataDiag[k], &S.pData[i]);
+    	if(sigmaDataDiag[k]==0) S.pData[i] = 4.0955e-09;
+    	else arm_sqrt_f32(sigmaDataDiag[k], &S.pData[i]);
         S.pData[i] = 1 / S.pData[i];
         k++;
     }

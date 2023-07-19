@@ -21,6 +21,31 @@ int main(void){
 
 	arm_rfft_fast_init_128_f32(&audioInput);
 
+	float32_t aData[4] = {1,2,3,4};
+	float32_t uData[4];
+	float32_t sData[2];
+	float32_t vData[4];
+	float32_t atData[4];
+
+	float32_t covData[4];
+
+	arm_matrix_instance_f32 A, U, S, V, At, covm;
+	arm_mat_init_f32 (&A, 2, 2, aData);
+	arm_mat_init_f32 (&At, 2, 2, atData);
+	arm_mat_init_f32 (&U, 2, 2, uData);
+	arm_mat_init_f32 (&V, 2, 2, vData);
+	arm_mat_init_f32 (&covm, 2, 2, covData);
+	//float a = -1;
+
+	//uint8_t a;
+	//a = svd_golub_reinsch(aData, 2, 2, uData, sData, vData);
+	//egv(&A, uData);
+	//compute_eigenvectors(uData, &A, &U);
+	//arm_mat_trans_f32 (&A, &At);
+	covMat(aData, covData, 2, 2);
+	//svd(&A, &U, &S);
+	whitenRows(&A, &A);
+
 
 	while(1){
 

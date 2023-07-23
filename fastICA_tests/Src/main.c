@@ -21,7 +21,7 @@ int main(void){
 
 	arm_rfft_fast_init_128_f32(&audioInput);
 
-	float32_t aData[4] = {1,2,3,4};
+	float32_t aData[4] = {-1,1,-1,1};
 	float32_t uData[4];
 	float32_t sData[2];
 	float32_t vData[4];
@@ -36,8 +36,10 @@ int main(void){
 	arm_mat_init_f32 (&V, 2, 2, vData);
 	//arm_mat_init_f32 (&covm, 2, 2, covData);
 
-	//whitenRows(&A, &V);
-	normRows(&A, &V);
+	covMat(aData, vData, 2, 2);
+	centerRows(&A, &V);
+	whitenRows(&A, &V);
+	fastICA(&A, &V, 2);
 
 	while(1){
 

@@ -12,9 +12,7 @@
 #include "arm_common_tables.h"
 #include "fpu.h"
 #include "fastICA.h"
-#include "centerRows.h"
-#include "whit.h"
-#include "cov.h"
+#include "waves.h"
 
 
 #define winLengthDouble	256
@@ -54,6 +52,6 @@ float ihsg[301],fsds[301];
 volatile char k1 = 0;
 volatile char k2 = 0;
 
-arm_rfft_fast_instance_f32 audioInput;
+arm_rfft_fast_instance_f32 audioInput, audioInput2;
 
 #endif /* MAIN_H_ */

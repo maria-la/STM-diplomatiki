@@ -76,8 +76,7 @@ void fastICA(arm_matrix_instance_f32 *matrix, arm_matrix_instance_f32 *Zica, uin
 		arm_mat_trans_f32 (&Gp, &Gpt);
 
 		arm_mat_mult_f32 (&G, &mHelp2, &W);
-		sc = 1/(float32_t)numCols;
-		arm_scale_f32 (wData, sc, wData2, (r*numRows));
+		arm_scale_f32 (wData, 1/numCols, wData2, (r*numRows));
 
 		for(i=0; i<r; i++){
 			arm_mean_f32 (&gpDataT[i*numCols], numCols, &muData[i]);

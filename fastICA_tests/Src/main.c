@@ -20,8 +20,12 @@ int main(void){
 	start_conversion_dual();
 
 	arm_rfft_fast_init_128_f32(&audioInput);
+	arm_rfft_fast_init_64_f32(&audioInput2);
 
-	float32_t aData[4] = {-1,1,-1,1};
+	arm_matrix_instance_f32 A,V;
+	//arm_rfft_fast_init_128_f32(&audioInput2);
+
+/*	float32_t aData[4] = {1,2,3,4};
 	float32_t uData[4];
 	float32_t sData[2];
 	float32_t vData[4];
@@ -39,15 +43,32 @@ int main(void){
 	covMat(aData, vData, 2, 2);
 	centerRows(&A, &V);
 	whitenRows(&A, &V);
-	fastICA(&A, &V, 2);
+	fastICA(&A, &V, 2);*/
+	/*float32_t vData[128*2];
+	//float32_t outData[128*2];
+	float32_t aData[128];
+
+	arm_mat_init_f32 (&A, 128, 1, aData);
+	//vData[128*2];
+	arm_mat_init_f32 (&V, 2, 128, vData);
+	for(int a=0;a<128; a++ ){
+		aData[a] = (sawtooth[a]+square[a])/2;
+	}
+
+	fastICA(&A, &V, 2);*/
+	float32_t vData[128*2];
+	float32_t outData[128*2];
+
+	int i = 0;
+	int j = 0;
 
 	while(1){
 
 		if(k1 != 0){
 			int k = k1;
 			k1 = 0;
-
-			int i = 0;
+			i = 0;
+			j = 0;
 
 			switch (k){
 			    case 1:
@@ -64,24 +85,35 @@ int main(void){
 
 
 			while(i < (winLength*k)){
-				input1[i] = (float32_t) (mic1[i]);
+				input1[i] =  ((sawtooth[i/k]+square[i/k])/2);
 				i++;
 			}
 
  			arm_rfft_fast_f32(&audioInput, &input1[i-winLength], &fftOut1[i-winLength], 0);
-			arm_cmplx_mag_f32(&fftOut1[i-winLength], &fftOut1[i-winLength], (winLength/2));
+			//arm_cmplx_mag_f32(&fftOut1[i-winLength], &fftOut1[i-winLength], (winLength/2));
 
-			fftOut1[i-winLength] = 0;
+			///fftOut1[i-winLength] = 0;
+
+		/*	for(j = 0; j<(winLength/2); j++){
+				fftOut1[i-j-1] = fftOut1[j];
+			}*/
+ 			arm_mat_init_f32 (&A, 128, 1, &fftOut1[i-winLength]);
+ 			//vData[128*2];
+ 			arm_mat_init_f32 (&V, 2, 128, vData);
+
+ 			fastICA(&A, &V, 2);
+			arm_rfft_fast_f32 (&audioInput2, vData, outData, 1);
 
 		}
 
 
 		if(k2 != 0){
-			int k = k2;
+			int kk = k2;
 			k2 = 0;
+			i = 0;
+			j = 0;
 
-			int i;
-			switch (k){
+			switch (kk){
 				case 1:
 				  i = 0;
 				  break;
@@ -96,8 +128,8 @@ int main(void){
 			}
 
 
-			while(i < (winLength*k)){
-				input1[i] = (mic2[i]);
+			while(i < (winLength*kk)){
+				input2[i] = (mic2[i]);
 				i++;
 			}
 
@@ -106,6 +138,10 @@ int main(void){
 			arm_cmplx_mag_f32(&fftOut2[i-winLength], &fftOut2[i-winLength], (winLength/2));
 
 			fftOut2[i-winLength] = 0;
+
+			for(j = 0; j<(winLength/2); j++){
+				fftOut2[i-j-1] = fftOut2[j];
+			}
 
 			}
 	}
